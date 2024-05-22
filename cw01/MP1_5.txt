@@ -1,0 +1,40 @@
+//wierzchołki trójkąta
+a = [20, 580];
+b = [300, 100];
+c = [580, 580];
+
+function setup() {
+  createCanvas(600, 600);
+  noLoop();
+}
+
+function draw() {
+  //noprotect
+  background(0); //tło = czarny
+  stroke(color(256)); //kolor rysowania = biały
+  //wyrysowanie wierzchołków dużego trójkąta
+  point(a[0], a[1]);
+  point(b[0], b[1]);
+  point(c[0], c[1]);
+  
+  //bieżący punkt
+  currPoint = a;
+  //rysowanie trójkąta Sierpińskiego pomiędzy punktami a, b, c
+  for (i = 0; i < 30000; i++) {
+    x = floor(random(0, 3));
+    
+    switch (x) {
+      case 0:
+        currPoint = [(currPoint[0] + a[0]) / 2, (currPoint[1] + a[1]) / 2];
+        break;
+      case 1:
+        currPoint = [(currPoint[0] + b[0]) / 2, (currPoint[1] + b[1]) / 2];
+        break;
+      default:
+        currPoint = [(currPoint[0] + c[0]) / 2, (currPoint[1] + c[1]) / 2];
+        break;
+    }
+    point(currPoint[0], currPoint[1]);
+  }
+  updatePixels();
+}

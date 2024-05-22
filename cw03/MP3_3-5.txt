@@ -1,0 +1,71 @@
+function setup() {
+  createCanvas(512, 512);
+  background(255);
+}
+
+//Współrzędne początku linii
+var x0 = -1;
+var y0 = -1;
+//Współrzędne końca linii
+var x1 = -1;
+var y1 = -1;
+
+//Pobranie współrzędnych początku w miejscu kliknięcia myszy
+function mousePressed() {
+  x0 = mouseX;
+  y0 = mouseY;
+}
+
+function mouseDragged() {
+  //Pobranie współrzędnych w miejscu kursora
+  x1 = mouseX;
+  y1 = mouseY;
+  background(255);
+  noStroke();
+  //Wyrysowanie punktu początkowego linii
+  fill('red');
+  ellipse(x0 - 3, y0 - 3, 6);
+  //Wyrysowanie punktu końcowego linii
+  fill('green');
+  ellipse(x1 - 3, y1 - 3, 6);
+}
+
+//Wyrysowaie linii po puszczeniu klawisza myszy
+function mouseReleased(){
+  background(255);
+  loadPixels();
+  draw_line();
+  updatePixels();
+}
+
+//Wyliczenie koloru piksela w zależności od jego pozycji i odległości względem narysowanej linii
+function set_pixel(x, y, d) {
+  c = color(-d * (d < 0), d * (d > 0), 0);
+  set(x, y, c);
+}
+
+function draw_line() {
+  //noprotect
+  dx = x1 - x0
+  dy = y1 - y0
+  a = dy / dx
+  b = y0 - a * x0
+  //Gradient
+  for (x = 0; x < width; x++){
+    for (y = 0; y < height; y++){
+	  //Odległość od prostej
+	  //Im większa odległość dxy, tym jaśniejszy kolor piksela, co tworzy efekt gradientu wzdłuż linii
+	  dxy = a*x - y + b;
+      set_pixel(x, y, dxy);
+    }
+  }
+  //Bez gradientu
+//   for (x = 0; x < width; x++) {
+//     for (y = 0; y < height; y++) {
+//		 //Sprawdza czy piksel znajduje się pod/nad/na linii 
+//       dxy = 2 * dy * (x - x0) - 2 * dx * (y - y0)
+//       set_pixel(x, y, dxy)
+//     }
+//   }
+  updatePixels();
+}

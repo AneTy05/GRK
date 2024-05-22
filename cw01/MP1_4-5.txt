@@ -1,0 +1,60 @@
+function setup() {
+  createCanvas(800, 600);
+  noLoop();
+}
+
+function draw() {
+  //noprotect
+  background(100);
+  skyHeight = 400;
+  flowCoor = []; 
+  houseHeight = 180;
+  houseWidth = 180;
+  roofHeight = 500;
+  myColor = color(255,255,255);
+  
+  //obliczanie współrzędnych dla kwatków
+  for (i = 0; i < 1000; i++) {
+    x = floor(random(0, width));
+    y = floor(random(skyHeight, height));
+    randomColor = color(floor(random(0, 255)), floor(random(0, 255)), floor(random(0, 255)));
+    
+    if (!flowCoor.includes(x)) {
+      flowCoor[x] = [];
+    }
+    flowCoor[x][y] = randomColor;
+  }
+  
+  for (x = 0, xr = width; x < width; x++, xr--) {
+    
+    for (y = 0, k = 1, j = height * 2; y < height; y++, k += 2, j -= 2) {
+      
+      if (y < skyHeight) {
+        myColor = color(0, 204, 255); //rysowanie błękitnego nieba
+        
+        if (y < skyHeight + houseHeight && y > skyHeight - houseHeight) {
+          
+          if (x > width / 2 - houseWidth && x < width / 2 + houseWidth) {
+            myColor = color(79, 29, 7); //rysowanie fasady domu
+          }
+        } else if (y < skyHeight + houseHeight + roofHeight && y > skyHeight - houseHeight - roofHeight) {
+          
+          if ((x <= width / 2 && k > height - x) || (x > width / 2 && j < xr + height)) {
+            myColor = color(205, 87, 0); //rysowanie dachu
+          }
+        }
+      } else {
+        
+        if (flowCoor[x] !== undefined && flowCoor[x][y] !== undefined) {
+          myColor = flowCoor[x][y];
+        
+        } else {
+          myColor = color(58, 157, 35); //rysowanie trawy
+        }
+      }
+      set(x, y, myColor);
+    }
+  }
+  
+  updatePixels();
+}
